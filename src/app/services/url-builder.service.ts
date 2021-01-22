@@ -9,7 +9,7 @@ export class UrlBuilderService {
 
   private productionUrl: string = "https://bzeee.github.io/chef-cook-off"
   // private nodeUrl: string = "http://localhost:8000"
-  private nodeUrl: string = "https://chef-cook-off.herokuapp.com/"
+  private nodeUrl: string = "https://chef-cook-off.herokuapp.com"
 
   constructor() { }
 
