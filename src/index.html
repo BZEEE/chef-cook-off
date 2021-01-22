@@ -5,18 +5,22 @@
   <title>Chef Cook Off</title>
   <!-- --------------------------------------------------------------------------------------------- -->
   <!-- 1. uncomment line below when deploying to github pages -->
-  <base href="https://bzeee.github.io/chef-cook-off/">
+  <!-- <base href="https://bzeee.github.io/chef-cook-off/"> -->
   <!-- 2. uncomment line below when developing using (ng serve) on localhost:4200 -->
-  <!-- <base href="/"> -->
+  <base href="/">
+  <!-- ---------------------------------------------------------------------------------------------- -->
   <!-- Steps for deploying to Github Pages
-  1. run (ng build --prod --base-href "https://bzeee.github.io/chef-cook-off/") to build project
-  2. run (npx angular-cli-ghpages — dir=dist/chef-cook-off) to deploy project
-  3. visit at https://bzeee.github.io/chef-cook-off/ -->
+      Link: https://github.com/angular-schule/angular-cli-ghpages
+      1. run (  ng deploy --base-href=/<repositoryname>/  ) to build and deploy project
+      2. visit at https://bzeee.github.io/chef-cook-off/ -->
   <!-- ---------------------------------------------------------------------------------------------- -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
-<body>
+<body class="mat-typography">
   <app-root></app-root>
 </body>
 </html>

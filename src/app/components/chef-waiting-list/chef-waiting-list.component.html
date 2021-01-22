@@ -1,0 +1,23 @@
+
+<h2>Waiting List</h2>
+
+<nz-table [nzData]="chefs">
+    <thead>
+        <tr>
+            <th>Chef</th>
+            <th>Risotto</th>
+            <th>Pizza</th>
+            <th>Cake</th>
+            <th>Baked Potato</th>
+        </tr>
+    </thead>
+    <tbody class="ef-deal-list-card">
+        <tr *ngFor="let chef of chefs; let i = index">
+            <td>{{chef.firstName}} {{chef.lastName}}</td>
+            <td>{{getMealScore('Risotto', chef.abilities)}}</td>
+            <td>{{getMealScore('Pizza', chef.abilities)}}</td>
+            <td>{{getMealScore('Cake', chef.abilities)}}</td>
+            <td>{{getMealScore('Baked Potato', chef.abilities)}}</td>
+        </tr>
+    </tbody>
+</nz-table>

@@ -1,0 +1,51 @@
+
+<app-loading-screen></app-loading-screen>
+
+<h2>Chef Teams</h2>
+<div style="display: flex; justify-content: space-between; align-items: center;">
+    <form [formGroup]="chefTeamSelectForm" nz-form>
+        <mat-form-field appearance="outline">
+            <mat-label>Number of Teams</mat-label>
+            <input matInput formControlName="numberOfTeams">
+            <mat-error *ngIf="chefTeamSelectForm.get('numberOfTeams').invalid">number of teams must be 2 or more</mat-error>
+        </mat-form-field>
+    </form>
+    
+    <div style="display: flex;">
+        <button *ngIf="chefTeams.length === 0" (click)="generateChefTeams()" mat-raised-button color="primary">Generate Teams</button>
+        <button *ngIf="chefTeams.length !== 0" (click)="resetChefTeams()" mat-raised-button color="primary" style="margin-left: 15px;">Reset Teams</button>
+    </div>
+</div>
+
+
+
+<div style="width:100%" *ngIf="chefTeams.length !== 0">
+    <mat-form-field appearance="outline" style="width: 100%;">
+        <mat-label>Select Team</mat-label>
+        <mat-select [(ngModel)]="selectedTeam">
+            <mat-option *ngFor="let team of chefTeams" [value]="team">Team #{{team.teamNumber}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+<nz-table *ngIf="selectedTeam" [nzData]="selectedTeam.chefs">
+    <thead>
+        <tr>
+            <th>Chef</th>
+            <th>Risotto</th>
+            <th>Pizza</th>
+            <th>Cake</th>
+            <th>Baked Potato</th>
+            <th>Total Score {{selectedTeam.totalTeamScore}}</th>
+        </tr>
+    </thead>
+    <tbody class="ef-deal-list-card">
+        <tr *ngFor="let chef of selectedTeam.chefs; let i = index">
+            <td>{{chef.firstName}} {{chef.lastName}}</td>
+            <td>{{getMealScore('Risotto', chef.abilities)}}</td>
+            <td>{{getMealScore('Pizza', chef.abilities)}}</td>
+            <td>{{getMealScore('Cake', chef.abilities)}}</td>
+            <td>{{getMealScore('Baked Potato', chef.abilities)}}</td>
+        </tr>
+    </tbody>
+</nz-table>
+
