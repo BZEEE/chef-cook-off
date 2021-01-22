@@ -7,11 +7,12 @@ import { SearchParam } from '../models/SearchParam';
 })
 export class UrlBuilderService {
 
-  private productionUrl: string = ""
+  private productionUrl: string = "https://bzeee.github.io/chef-cook-off"
+  private nodeUrl: string = "http://localhost:8000"
 
   constructor() { }
 
-  buildParams(params: SearchParam[]) {
+  private buildParams(params: SearchParam[]) {
     // build parameters for url request
     if (params != null && params.length !== 0) {
       // loop through each parameter and build a string in the form of
@@ -32,5 +33,9 @@ export class UrlBuilderService {
 
   buildUrlForProduction(endpoint: string, params: SearchParam[] = []) {
     return `${this.productionUrl}/${endpoint}${this.buildParams(params)}`
+  }
+
+  buildUrlForNodeApi(endpoint: string, params: SearchParam[] = []) {
+    return `${this.nodeUrl}/${endpoint}${this.buildParams(params)}`
   }
 }

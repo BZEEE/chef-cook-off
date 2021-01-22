@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError, of } from 'rxjs';
-import { catchError } from 'rxjs/operators'
+import { catchError, map } from 'rxjs/operators'
 import { Chef } from '../models/chef';
 import { SearchParam } from '../models/SearchParam';
 import { UrlBuilderService } from './url-builder.service';
@@ -11,85 +11,41 @@ import { UrlBuilderService } from './url-builder.service';
 })
 export class GetChefsService {
 
-  private endpoint: string = "registered-chefs" 
+  private endpoint: string = "api/registered-chefs" 
 
   constructor(private urlBuilder: UrlBuilderService,
               private httpClient: HttpClient) { }
 
   private handleResponseError(error: HttpErrorResponse) {
     let message = `Error code: ${error.status}, ${error.message}`
-    console.error(message)
+    console.warn(message)
     return throwError(message)
   }
 
   getChefs(): Observable<Chef[]> {
-    // for temporary testing
-    return of([
-        new Chef("5e21edb7e81ae7ec8cf1a24e", "Fisher", "Dyer", 
-        [{
-          "type": "Risotto",
-          "rating": 62
-        },
-        {
-          "type": "Pizza",
-          "rating": 26
-        },
-        {
-          "type": "Cake",
-          "rating": 64
-        },
-        {
-          "type": "Baked Potato",
-          "rating": 26
-        }]
-        ),
-        new Chef("jyukukyulyku", "james", "gher", 
-        [{
-          "type": "Risotto",
-          "rating": 78
-        },
-        {
-          "type": "Pizza",
-          "rating": 23
-        },
-        {
-          "type": "Cake",
-          "rating": 21
-        },
-        {
-          "type": "Baked Potato",
-          "rating": 98
-        }]
-        ),
-        new Chef("trnrnegregrerg", "Kim", "Diva", 
-        [{
-          "type": "Risotto",
-          "rating": 12
-        },
-        {
-          "type": "Pizza",
-          "rating": 67
-        },
-        {
-          "type": "Cake",
-          "rating": 32
-        },
-        {
-          "type": "Baked Potato",
-          "rating": 23
-        }]
-        )
-    ])
-
-    //--- for when the registration endpoint is ready ---//
+    //--- for when the registration production endpoint is ready ---//
     //---------------------------------------------------//
     // create http request to get chefs from endpoint
-    // let url = this.urlBuilder.buildUrlForProduction(
+    // let url = this.urlBuilder.buildUrlForNodeApi(
     //   this.endpoint,                       // the endpoint to call from the registration team
-    //   [ new SearchParam("event", "1") ]    // a list of query parameters if needed (key, value)              
+    //   []    // a list of query parameters if needed (key, value)              
     // )
     // return this.httpClient.get<Chef[]>(url).pipe(
-    //   catchError(this.handleResponseError)
+    // map(chefObject => chefObject["chefs"]),  
+    // catchError(this.handleResponseError)
     // )
+
+
+    //--- for when the registration production endpoint is ready ---//
+    //---------------------------------------------------//
+    // create http request to get chefs from endpoint
+    let url = this.urlBuilder.buildUrlForProduction(
+      this.endpoint,                       // the endpoint to call from the registration team
+      []    // a list of query parameters if needed (key, value)              
+    )
+    return this.httpClient.get<Chef[]>(url).pipe(
+    map(chefObject => chefObject["chefs"]),  
+    catchError(this.handleResponseError)
+    )
   }
 }
