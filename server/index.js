@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 
 app.use(cors())
 // app.use(bodyParser.json());
-app.use(express.static(__dirname +'/../dist'));
+app.use(express.static(__dirname +'/../dist/chef-cook-off'));
 
 
 app.get('/', (req, res) => {
