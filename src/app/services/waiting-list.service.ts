@@ -18,6 +18,10 @@ export class WaitingListService {
     })
   }
 
+  setWaitingList(chefs: Chef[]) {
+    this.waitingListObservable.next(chefs);
+  }
+
   clearWaitingList() {
     this.waitingListObservable.next([])
   }

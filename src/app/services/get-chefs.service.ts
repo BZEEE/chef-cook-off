@@ -26,7 +26,7 @@ export class GetChefsService {
     //--- for when the registration production endpoint is ready ---//
     //---------------------------------------------------//
     // create http request to get chefs from endpoint
-    let url = this.urlBuilder.buildUrlForNodeApi(
+    let url = this.urlBuilder.buildUrlForProduction(
       this.endpoint,                       // the endpoint to call from the registration team
       []    // a list of query parameters if needed (key, value)              
     )
@@ -34,18 +34,5 @@ export class GetChefsService {
     map(chefObject => chefObject["chefs"]),  
     catchError(this.handleResponseError)
     )
-
-
-    //--- for when the registration production endpoint is ready ---//
-    //---------------------------------------------------//
-    // create http request to get chefs from endpoint
-    // let url = this.urlBuilder.buildUrlForProduction(
-    //   this.endpoint,                       // the endpoint to call from the registration team
-    //   []    // a list of query parameters if needed (key, value)              
-    // )
-    // return this.httpClient.get<Chef[]>(url).pipe(
-    // map(chefObject => chefObject["chefs"]),  
-    // catchError(this.handleResponseError)
-    // )
   }
 }

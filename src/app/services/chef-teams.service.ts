@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Chef } from '../models/chef';
 import { ChefTeam } from '../models/chef-team';
 import { GetChefsService } from './get-chefs.service';
+import { WaitingListService } from './waiting-list.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,30 +12,36 @@ export class ChefTeamsService {
 
   chefTeamsObservable: BehaviorSubject<ChefTeam[]> = new BehaviorSubject([])
 
-  constructor(private getChefsSvc: GetChefsService) { }
+  constructor(private getChefsSvc: GetChefsService,
+              private waitingListService: WaitingListService) { }
 
   generateChefTeams(numberOfTeams: number) {
     this.getChefsSvc.getChefs().subscribe(chefs => {
-      this.chefTeamsObservable.next(this.evenlyDistributeTeams(numberOfTeams, chefs))
+      // calculate total number of players required to make all teams have the same number of players
+      // eg. if 39 players need to be split into 5 teams, then the most players we can use is 35
+      let totalPlayers = chefs.length - (chefs.length % numberOfTeams)
+      // evenly distribute kitchen teams and notify all observers of the new teams
+      this.chefTeamsObservable.next(this.evenlyDistributeTeams(numberOfTeams, totalPlayers, chefs))
+      // get the unassigned chefs and notify all observers of the new waiting list
+      this.waitingListService.setWaitingList(this.getUnassignedChefs(totalPlayers, chefs))
     })
   }
 
-  evenlyDistributeTeams(numberOfTeams: number, chefs: Chef[]): ChefTeam[] {
+  evenlyDistributeTeams(numberOfTeams: number, totalPlayers: number, chefs: Chef[]): ChefTeam[] {
     let chefTeams: ChefTeam[] = []
     for (let i = 1; i <= numberOfTeams; i++) {
       chefTeams.push(new ChefTeam(i, []))
     }
- 
-    // figure out which team currently has the lowest overall score
-    // and add the next chef to that team
-    // repeat until all chefs have been added to a team
-    chefs.forEach(chef => {
+
+    for (let i = 0; i < totalPlayers; i++) {
+      // figure out which team currently has the lowest overall score
+      // and add the next chef to that team
+      // repeat until all chefs have been added to a team
       let lowestScoreTeam: ChefTeam = this.findTeamWithLowestScore(chefTeams)
-      // add the next chef in the queue to the lowest scoring team
-      lowestScoreTeam.chefs.push(chef)
+      lowestScoreTeam.chefs.push(chefs[i])
       // recalculate score for the team that just had a chef pushed to it
       lowestScoreTeam.recalculateTeamScore()
-    })
+    }
     return chefTeams
   }
 
@@ -46,6 +53,12 @@ export class ChefTeamsService {
       }
     })
     return currentLowestTeam
+  }
+
+  getUnassignedChefs(totalPlayers: number, chefs: Chef[]) {
+    // return the remaining chefs at the end of the list 
+    // that were not assigned to a kitchen team
+    return chefs.slice(totalPlayers, chefs.length)
   }
 
   clearChefTeams() {
