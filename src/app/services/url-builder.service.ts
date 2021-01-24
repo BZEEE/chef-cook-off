@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SearchParam } from '../models/SearchParam';
+import { SearchParam } from '../models/search-param';
 
 @Injectable({
   providedIn: 'root'

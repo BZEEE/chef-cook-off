@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { SearchParam } from '../models/SearchParam';
+import { SearchParam } from '../models/search-param';
 import { UrlBuilderService } from './url-builder.service';
 
 describe('UrlBuilderService', () => {

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError, of, BehaviorSubject } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators'
 import { Chef } from '../models/chef';
-import { SearchParam } from '../models/SearchParam';
+import { SearchParam } from '../models/search-param';
 import { UrlBuilderService } from './url-builder.service';
 
 @Injectable({
