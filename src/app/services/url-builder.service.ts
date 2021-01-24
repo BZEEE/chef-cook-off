@@ -8,7 +8,7 @@ import { SearchParam } from '../models/SearchParam';
 export class UrlBuilderService {
 
   private productionUrl: string = "https://chef-cook-off.herokuapp.com"
-  private nodeUrl: string = "http://localhost:8000"
+  private nodeUrl: string = "http://localhost:8080"
 
   constructor() { }
 

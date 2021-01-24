@@ -2,12 +2,14 @@
 const express = require('express')
 const app = express();
 const fs = require('fs')
+var cors = require('cors')
 // const bodyParser = require('body-parser');
 
 // load test data from local json file
 let chefDataRaw = fs.readFileSync("chefs.json")
 let chefDataJson = JSON.parse(chefDataRaw)
 
+app.use(cors())
 app.use(express.static('./dist/chef-cook-off'));
 
 // Load the main application page from the production bundle

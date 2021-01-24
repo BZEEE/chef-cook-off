@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } 
 import { Chef } from 'src/app/models/chef';
 import { ChefTeam } from 'src/app/models/chef-team';
 import { ChefTeamsService } from 'src/app/services/chef-teams.service';
+import { GetChefsService } from 'src/app/services/get-chefs.service';
 import { WaitingListService } from 'src/app/services/waiting-list.service';
 import { LoadingScreenComponent } from '../loading-screen/loading-screen.component';
 
@@ -16,10 +17,11 @@ export class ChefTeamsComponent implements OnInit {
   chefTeams: ChefTeam[] = [new ChefTeam(1, []), new ChefTeam(2, [])]
   selectedTeam: ChefTeam;
   numberOfTeams: number;
+  numberOfChefs: number;
   chefTeamSelectForm: FormGroup
-  temp
 
   constructor(private waitingListSvc: WaitingListService,
+              private getChefsSvc: GetChefsService,
               private chefTeamsSvc: ChefTeamsService,
               private fb: FormBuilder) { }
 
@@ -28,15 +30,20 @@ export class ChefTeamsComponent implements OnInit {
       numberOfTeams: new FormControl(null, [Validators.required, Validators.min(2)])
     })
 
+    this.getChefsSvc.registeredChefObservable.subscribe(chefs => {
+      this.numberOfChefs = chefs.length
+      // set number of teams allowed to be between 2 and total number of registered chefs
+      this.chefTeamSelectForm.get("numberOfTeams").setValidators([
+        Validators.required,
+        Validators.min(2),
+        Validators.max(this.numberOfChefs)
+      ])
+    })
+
     // be notified if the chef teams are re-generated
     this.chefTeamsSvc.chefTeamsObservable.subscribe(chefTeams => {
       this.chefTeams = chefTeams
     })
-
-    // // display chefs that belong to a team, if user selects a particular team from dropdown 
-    // this.chefTeamSelectForm.get("selectedChefTeam").valueChanges.subscribe(team => {
-    //   this.selectedTeam = team
-    // })
 
   }
 

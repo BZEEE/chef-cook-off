@@ -1,7 +1,7 @@
 
 <h2>Waiting List</h2>
 
-<nz-table [nzData]="chefs">
+<nz-table nzFooter="{{chefs.length}} Registered Chefs In Waitning List" [nzData]="chefs" [nzShowPagination]="false" [nzScroll]="{ y: '300px' }">
     <thead>
         <tr>
             <th>Chef</th>
@@ -21,3 +21,4 @@
         </tr>
     </tbody>
 </nz-table>
+

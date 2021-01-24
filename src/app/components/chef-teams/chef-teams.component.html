@@ -7,7 +7,7 @@
         <mat-form-field appearance="outline">
             <mat-label>Number of Teams</mat-label>
             <input matInput formControlName="numberOfTeams">
-            <mat-error *ngIf="chefTeamSelectForm.get('numberOfTeams').invalid">number of teams must be 2 or more</mat-error>
+            <mat-error *ngIf="chefTeamSelectForm.get('numberOfTeams').invalid">number of teams must be between 2 and {{numberOfChefs}}</mat-error>
         </mat-form-field>
     </form>
     
@@ -17,8 +17,7 @@
     </div>
 </div>
 
-
-
+<div>
 <div style="width:100%" *ngIf="chefTeams.length !== 0">
     <mat-form-field appearance="outline" style="width: 100%;">
         <mat-label>Select Team</mat-label>
@@ -27,7 +26,7 @@
         </mat-select>
     </mat-form-field>
 </div>
-<nz-table *ngIf="selectedTeam" [nzData]="selectedTeam.chefs">
+<nz-table *ngIf="selectedTeam" [nzData]="selectedTeam.chefs" [nzShowPagination]="false" [nzScroll]="{ y: '300px' }">
     <thead>
         <tr>
             <th>Chef</th>
@@ -35,7 +34,15 @@
             <th>Pizza</th>
             <th>Cake</th>
             <th>Baked Potato</th>
-            <th>Total Score {{selectedTeam.totalTeamScore}}</th>
+            <th></th>
+        </tr>
+        <tr>
+            <th>Averages</th>
+            <th>{{selectedTeam.averageRisottoScore}}</th>
+            <th>{{selectedTeam.averagePizzaScore}}</th>
+            <th>{{selectedTeam.averageCakeScore}}</th>
+            <th>{{selectedTeam.averageBakedPotatoScore}}</th>
+            <th>Total Team Score: {{selectedTeam.totalTeamScore}}</th>
         </tr>
     </thead>
     <tbody class="ef-deal-list-card">
@@ -48,4 +55,7 @@
         </tr>
     </tbody>
 </nz-table>
+</div>
+
+
 
