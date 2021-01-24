@@ -14,7 +14,7 @@ import { LoadingScreenComponent } from '../loading-screen/loading-screen.compone
 })
 export class ChefTeamsComponent implements OnInit {
   @ViewChild(LoadingScreenComponent, {static: false}) loadingScreen: LoadingScreenComponent;
-  chefTeams: ChefTeam[] = [new ChefTeam(1, []), new ChefTeam(2, [])]
+  chefTeams: ChefTeam[] = []
   selectedTeam: ChefTeam;
   numberOfTeams: number;
   numberOfChefs: number;

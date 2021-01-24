@@ -19,7 +19,7 @@ export class GetChefsService {
 
   private handleResponseError(error: HttpErrorResponse) {
     let message = `Error code: ${error.status}, ${error.message}`
-    console.warn(message)
+    console.error(message)
     return throwError(message)
   }
 

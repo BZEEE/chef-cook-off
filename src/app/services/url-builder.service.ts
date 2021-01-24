@@ -1,4 +1,3 @@
-import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SearchParam } from '../models/SearchParam';
 
@@ -37,5 +36,13 @@ export class UrlBuilderService {
 
   buildUrlForNodeApi(endpoint: string, params: SearchParam[] = []) {
     return `${this.nodeUrl}/${endpoint}${this.buildParams(params)}`
+  }
+
+  getNodeUrl() {
+    return this.nodeUrl
+  }
+
+  getProductionUrl() {
+    return this.productionUrl
   }
 }
