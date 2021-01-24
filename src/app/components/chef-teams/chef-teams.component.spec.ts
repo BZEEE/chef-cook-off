@@ -1,10 +1,10 @@
 import { HttpClientModule } from '@angular/common/http';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
 import { ChefTeamsService } from 'src/app/services/chef-teams.service';
 import { GetChefsService } from 'src/app/services/get-chefs.service';
 import { WaitingListService } from 'src/app/services/waiting-list.service';
-
 import { ChefTeamsComponent } from './chef-teams.component';
 
 describe('ChefTeamsComponent', () => {
@@ -14,7 +14,7 @@ describe('ChefTeamsComponent', () => {
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         declarations: [ ChefTeamsComponent ],
-        imports: [HttpClientModule],
+        imports: [HttpClientModule, NzMessageModule],
         providers: [
             WaitingListService,
             GetChefsService,
@@ -25,7 +25,6 @@ describe('ChefTeamsComponent', () => {
       .compileComponents();
     }));
   
-
     beforeEach(() => {
       fixture = TestBed.createComponent(ChefTeamsComponent);
       component = fixture.componentInstance;

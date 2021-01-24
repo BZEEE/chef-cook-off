@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { Chef } from 'src/app/models/chef';
 import { ChefTeam } from 'src/app/models/chef-team';
 import { ChefTeamsService } from 'src/app/services/chef-teams.service';
@@ -23,13 +24,16 @@ export class ChefTeamsComponent implements OnInit {
   constructor(private waitingListSvc: WaitingListService,
               private getChefsSvc: GetChefsService,
               private chefTeamsSvc: ChefTeamsService,
+              private messageSvc: NzMessageService,
               private fb: FormBuilder) { }
 
   ngOnInit(): void {
+    // numer of teams can be adjusted dynamically by the user
     this.chefTeamSelectForm = this.fb.group({
       numberOfTeams: new FormControl(null, [Validators.required, Validators.min(2)])
     })
 
+    // observe the chef endpoint to recieve callbacks whenever the chefs are refreshed from the server
     this.getChefsSvc.registeredChefObservable.subscribe(chefs => {
       this.numberOfChefs = chefs.length
       // set number of teams allowed to be between 2 and total number of registered chefs
@@ -48,15 +52,23 @@ export class ChefTeamsComponent implements OnInit {
   }
 
   generateChefTeams() {
+    // validate that a number has been entered before generating the chef teams
     if (this.chefTeamSelectForm.get("numberOfTeams").valid) {
-      this.chefTeamsSvc.generateChefTeams(this.chefTeamSelectForm.get("numberOfTeams").value)
-      this.waitingListSvc.clearWaitingList()
-      this.chefTeamSelectForm.disable()
+      // show loading screen as we request from the server
       this.loadingScreen.show()
-      setTimeout(() => {
+      // clear the waiting list
+      this.waitingListSvc.clearWaitingList()
+      // generate the new chef teams
+      this.chefTeamsSvc.generateChefTeams(this.chefTeamSelectForm.get("numberOfTeams").value).then((response) => {
+        this.chefTeamSelectForm.disable()
         this.loadingScreen.hide()
-      }, 1000);
+        this.messageSvc.success("generated teams")
+      }).catch((err) => {
+        this.loadingScreen.hide()
+        this.messageSvc.error("failed to generate teams")
+      })
     } else {
+      // show errors in form fields if any exist
       this.chefTeamSelectForm.markAllAsTouched()
     }
     
@@ -64,14 +76,20 @@ export class ChefTeamsComponent implements OnInit {
   }
 
   resetChefTeams() {
-    this.chefTeamsSvc.clearChefTeams()
-    this.waitingListSvc.resetChefsToWaitingList()
-    this.chefTeamSelectForm.enable()
-    this.selectedTeam = null
     this.loadingScreen.show()
-    setTimeout(() => {
+    // reset chef teams
+    this.chefTeamsSvc.clearChefTeams()
+    // enable user input again for creating chef teams
+    this.chefTeamSelectForm.enable()
+    // hide the team's table in the user interface
+    this.selectedTeam = null
+    // put all chefs back to the waiting list
+    this.waitingListSvc.resetChefsToWaitingList().then((response) => {
       this.loadingScreen.hide()
-    }, 1000);
+      this.messageSvc.success("successfully reset teams")
+    }).catch((err) => {
+      this.messageSvc.error("failed to reset teams")
+    })
   }
 
   getMealScore(targetMealType: string, mealScores: Object[]) {

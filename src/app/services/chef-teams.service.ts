@@ -16,19 +16,26 @@ export class ChefTeamsService {
               private waitingListService: WaitingListService) { }
 
   generateChefTeams(numberOfTeams: number) {
-    this.getChefsSvc.getChefs().subscribe(chefs => {
-      // calculate total number of players required to make all teams have the same number of players
-      // eg. if 39 players need to be split into 5 teams, then the most players we can use is 35
-      let totalPlayers = chefs.length - (chefs.length % numberOfTeams)
-      // evenly distribute kitchen teams and notify all observers of the new teams
-      this.chefTeamsObservable.next(this.evenlyDistributeTeams(numberOfTeams, totalPlayers, chefs))
-      // get the unassigned chefs and notify all observers of the new waiting list
-      this.waitingListService.setWaitingList(this.getUnassignedChefs(totalPlayers, chefs))
+    return new Promise<any>((resolve, reject) => {
+      this.getChefsSvc.getChefs().subscribe(chefs => {
+        // calculate total number of players required to make all teams have the same number of players
+        // eg. if 39 players need to be split into 5 teams, then the most players we can use is 35
+        let totalPlayers = chefs.length - (chefs.length % numberOfTeams)
+        // evenly distribute kitchen teams and notify all observers of the new teams
+        this.chefTeamsObservable.next(this.evenlyDistributeTeams(numberOfTeams, totalPlayers, chefs))
+        // get the unassigned chefs and notify all observers of the new waiting list
+        this.waitingListService.setWaitingList(this.getUnassignedChefs(totalPlayers, chefs))
+        resolve("success")
+      },(err) => {
+        reject(err)
+      })
     })
+    
   }
 
   evenlyDistributeTeams(numberOfTeams: number, totalPlayers: number, chefs: Chef[]): ChefTeam[] {
     let chefTeams: ChefTeam[] = []
+    // create the number of chef teams required
     for (let i = 1; i <= numberOfTeams; i++) {
       chefTeams.push(new ChefTeam(i, []))
     }
@@ -46,8 +53,10 @@ export class ChefTeamsService {
   }
 
   findTeamWithLowestScore(teams: ChefTeam[]) {
+    // assume the first team in the list has the lowest overall score
     let currentLowestTeam = teams[0]
     teams.forEach(team => {
+      // loop through all teams and compare which one has the lowest score, at the end return lowest score team
       if (team.totalTeamScore < currentLowestTeam.totalTeamScore) {
         currentLowestTeam = team
       }

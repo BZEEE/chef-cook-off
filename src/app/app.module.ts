@@ -21,7 +21,8 @@ import { MatSelectModule } from '@angular/material/select'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { NzInputModule } from 'ng-zorro-antd/input'
 import { NzPaginationModule } from 'ng-zorro-antd/pagination'
-import { MatInput, MatInputModule } from '@angular/material/input'
+import { MatInputModule } from '@angular/material/input'
+import { NzMessageServiceModule } from 'ng-zorro-antd/message'
 import { ChefWaitingListComponent } from './components/chef-waiting-list/chef-waiting-list.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { ChefTeamsComponent } from './components/chef-teams/chef-teams.component';
@@ -55,7 +56,8 @@ registerLocaleData(en);
     NzInputModule,
     MatInputModule,
     MatProgressSpinnerModule,
-    NzPaginationModule
+    NzPaginationModule,
+    NzMessageServiceModule
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent]

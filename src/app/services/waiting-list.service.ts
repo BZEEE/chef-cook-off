@@ -13,9 +13,15 @@ export class WaitingListService {
   constructor(private getChefsSvc: GetChefsService) { }
 
   resetChefsToWaitingList() {
-    this.getChefsSvc.getChefs().subscribe(chefs => {
-      this.waitingListObservable.next(chefs)
+    return new Promise<string>((resolve, reject) => {
+      this.getChefsSvc.getChefs().subscribe(chefs => {
+        this.waitingListObservable.next(chefs)
+        resolve("success")
+      }, (err) => {
+        reject(err)
+      })
     })
+    
   }
 
   setWaitingList(chefs: Chef[]) {
