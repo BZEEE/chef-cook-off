@@ -28,8 +28,8 @@ export class GetChefsService {
     //---------------------------------------------------//
     // create http request to get chefs from endpoint
     let url = this.urlBuilder.buildUrlForProduction(
-      this.endpoint,                       // the endpoint to call from the registration team
-      []    // a list of query parameters if needed (key, value)              
+      this.endpoint,          // the endpoint to call from the registration team
+      []                      // a list of query parameters if needed (key, value)              
     )
     return this.httpClient.get<Chef[]>(url).pipe(
     map(chefObject => chefObject["chefs"]),

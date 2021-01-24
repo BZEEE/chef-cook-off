@@ -15,6 +15,7 @@ export class WaitingListService {
   resetChefsToWaitingList() {
     return new Promise<string>((resolve, reject) => {
       this.getChefsSvc.getChefs().subscribe(chefs => {
+        // refresh the list of chefs from the endpoint and assign all to waiting list
         this.waitingListObservable.next(chefs)
         resolve("success")
       }, (err) => {
